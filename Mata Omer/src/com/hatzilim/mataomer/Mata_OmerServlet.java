@@ -20,6 +20,6 @@ public class Mata_OmerServlet extends HttpServlet {
 		
 		Question q = new Question ("the text for the q");
 		ofy().save().entity(q).now();
-		resp.getWriter().println("check persisted");
+		resp.getWriter().println("changeds");
 	}
 }
