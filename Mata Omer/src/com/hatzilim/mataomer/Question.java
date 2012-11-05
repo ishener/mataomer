@@ -13,7 +13,7 @@ import com.googlecode.objectify.annotation.Index;
 public class Question {
 	@Id Long id;
 	@Index String question;
-	Boolean openQuestion;
+	@Index Boolean openQuestion;
 	List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
 	
 	public Question () {
@@ -50,7 +50,6 @@ public class Question {
     }
 	
 	public void addAnswer ( Answer ans ) {
-		System.out.println("adding this key: " + ans.getKey());
 		answers.add ( Ref.create(ans.getKey(), ans) );
 	}
 //	public List<Answer> getAnswers () {
