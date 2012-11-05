@@ -4,14 +4,17 @@ package com.hatzilim.mataomer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class Question {
 	@Id Long id;
-	String question;
-//	private final List<Answer> answers = new ArrayList<Answer>();
+	@Index String question;
+	Boolean openQuestion;
+	List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
 	
 	public Question () {
 		
@@ -24,7 +27,6 @@ public class Question {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -35,10 +37,22 @@ public class Question {
 	public void setQuestion(String arg) {
 		this.question = arg;
 	}
+
+	public Boolean getOpenQuestion() {
+		return openQuestion;
+	}
+	public void setOpenQuestion(Boolean openQuestion) {
+		this.openQuestion = openQuestion;
+	}
 	
-//	public void addAnswer ( String ans ) {
-//		answers.add (new Answer(ans, 0));
-//	}
+	com.googlecode.objectify.Key<Question> getKey() {
+        return com.googlecode.objectify.Key.create(Question.class, id); 
+    }
+	
+	public void addAnswer ( Answer ans ) {
+		System.out.println("adding this key: " + ans.getKey());
+		answers.add ( Ref.create(ans.getKey(), ans) );
+	}
 //	public List<Answer> getAnswers () {
 //		return this.answers;
 //	}

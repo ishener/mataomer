@@ -7,6 +7,14 @@
 		<servlet-name>Mata_Omer</servlet-name>
 		<url-pattern>/mata_omer</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>question_admin</servlet-name>
+		<servlet-class>com.hatzilim.mataomer.QuestionAdmin</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>question_admin</servlet-name>
+		<url-pattern>/admin/process</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
