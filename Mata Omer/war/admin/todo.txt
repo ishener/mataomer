@@ -1,0 +1,6 @@
+
+1. add parent to answers
+2. create the view last questions page
+	2.1 add edit and delete
+	2.2 add next question
+3. create the view question tree page

@@ -8,13 +8,14 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
 @Entity
 public class Question {
 	@Id Long id;
 	@Index String question;
 	@Index Boolean openQuestion;
-	List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
+	@Load List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
 	
 	public Question () {
 		
@@ -52,9 +53,14 @@ public class Question {
 	public void addAnswer ( Answer ans ) {
 		answers.add ( Ref.create(ans.getKey(), ans) );
 	}
-//	public List<Answer> getAnswers () {
-//		return this.answers;
-//	}
+
+	public List<Ref<Answer>> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Ref<Answer>> answers) {
+		this.answers = answers;
+	}
 	
 }
 

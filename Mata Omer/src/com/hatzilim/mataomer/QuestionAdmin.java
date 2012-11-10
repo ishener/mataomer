@@ -4,9 +4,9 @@ package com.hatzilim.mataomer;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,17 +20,14 @@ public class QuestionAdmin extends HttpServlet {
 		ObjectifyService.register(Question.class);
 		ObjectifyService.register(Answer.class);
 		
-		resp.setContentType("text/plain");
+		List<Question> questions = ofy().load().type(Question.class).limit(50).list();
 		
-		Answer a = new Answer ("answer 3");
-		ofy().save().entity(a).now();
-		
-		Question q = new Question ("the text for the q");
-		q.addAnswer(a);
-		ofy().save().entity(q).now();
-		
-//		Question q = ofy().load().type(Question.class).id(1).get();
-		resp.getWriter().println( a.getKey() );
+		req.setAttribute("questions", questions);
+		try { 
+			getServletContext().getRequestDispatcher("/admin/view-questions.jsp").forward(req, resp); 
+		} catch (ServletException e) {
+			System.out.println (e.getMessage());
+		}
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -46,7 +43,7 @@ public class QuestionAdmin extends HttpServlet {
 			Question q = new Question ( req.getParameter("question") );
 			q.setOpenQuestion( req.getParameter("open_answer") != null );
 			
-			// not loop through the answers, persist each one, and add to q
+			// now loop through the answers, persist each one, and add to q
 			String[] answers = req.getParameterValues("option");
 			Answer a;
 			for( String answer : answers) {
