@@ -19,8 +19,8 @@
 			</p>
 		</c:forEach>
 	<p>
-		<a href="/add-question?action=edit&key=${ques.id}">Edit</a>
-		<a href="/add-question?action=delete&key=${ques.id}">Delete</a>
+		<a href="/admin/process?action=edit&key=${ques.id}">Edit</a>
+		<a href="/admin/process?action=delete&key=${ques.id}">Delete</a>
 	</p>
 </c:forEach>
 

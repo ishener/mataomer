@@ -20,8 +20,15 @@ public class QuestionAdmin extends HttpServlet {
 		ObjectifyService.register(Question.class);
 		ObjectifyService.register(Answer.class);
 		
-		List<Question> questions = ofy().load().type(Question.class).limit(50).list();
+		if ( req.getParameter("action") != null ) {
+			Long key = Long.parseLong(req.getParameter("key"));
+			if ( req.getParameter("action").equalsIgnoreCase("delete") ) {
+				// delete according to the key parameter
+				ofy().delete().type(Question.class).id(key).now();
+			}
+		}
 		
+		List<Question> questions = ofy().load().type(Question.class).limit(50).list();
 		req.setAttribute("questions", questions);
 		try { 
 			getServletContext().getRequestDispatcher("/admin/view-questions.jsp").forward(req, resp); 

@@ -14,9 +14,6 @@
 	<servlet-mapping>
 		<servlet-name>question_admin</servlet-name>
 		<url-pattern>/admin/process</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>question_admin</servlet-name>
 		<url-pattern>/admin/view</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>

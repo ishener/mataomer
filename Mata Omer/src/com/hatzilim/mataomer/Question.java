@@ -54,8 +54,12 @@ public class Question {
 		answers.add ( Ref.create(ans.getKey(), ans) );
 	}
 
-	public List<Ref<Answer>> getAnswers() {
-		return answers;
+	public List<Answer> getAnswers() {
+		List<Answer> realAnswers = new ArrayList<Answer>();
+		for ( Ref<Answer> a : answers ) {
+			realAnswers.add(a.get());
+		}
+		return realAnswers;
 	}
 
 	public void setAnswers(List<Ref<Answer>> answers) {
