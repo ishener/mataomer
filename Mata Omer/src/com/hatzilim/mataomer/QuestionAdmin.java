@@ -25,6 +25,17 @@ public class QuestionAdmin extends HttpServlet {
 			if ( req.getParameter("action").equalsIgnoreCase("delete") ) {
 				// delete according to the key parameter
 				ofy().delete().type(Question.class).id(key).now();
+			} else if ( req.getParameter("action").equalsIgnoreCase("edit") ) {
+				// display the question tree
+				Question q = ofy().load().type(Question.class).id(key).get();
+				System.out.println(q.getQuestion());
+				req.setAttribute("q", q);
+				try { 
+					getServletContext().getRequestDispatcher("/admin/show-tree.jsp").forward(req, resp); 
+				} catch (ServletException e) {
+					System.out.println (e.getMessage());
+				}
+				return;
 			}
 		}
 		
@@ -68,4 +79,5 @@ public class QuestionAdmin extends HttpServlet {
 		} 
 		
 	}
+	
 }

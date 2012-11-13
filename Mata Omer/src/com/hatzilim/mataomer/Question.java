@@ -66,5 +66,9 @@ public class Question {
 		this.answers = answers;
 	}
 	
+	public String getOutput () {
+		return "ok dude";
+	}
+	
 }
 
