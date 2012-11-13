@@ -67,7 +67,12 @@ public class Question {
 	}
 	
 	public String getOutput () {
-		return "ok dude";
+		String output = "<div class=\"qNode\">";
+		output += "<p class=\"qp\">" + this.question + "</p>";
+		for ( Answer a : getAnswers() ) {
+			output += a.getOutput();
+		}
+		return output + "</div>";
 	}
 	
 }

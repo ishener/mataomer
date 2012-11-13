@@ -28,7 +28,6 @@ public class QuestionAdmin extends HttpServlet {
 			} else if ( req.getParameter("action").equalsIgnoreCase("edit") ) {
 				// display the question tree
 				Question q = ofy().load().type(Question.class).id(key).get();
-				System.out.println(q.getQuestion());
 				req.setAttribute("q", q);
 				try { 
 					getServletContext().getRequestDispatcher("/admin/show-tree.jsp").forward(req, resp); 

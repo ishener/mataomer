@@ -41,4 +41,14 @@ public class Answer {
     com.googlecode.objectify.Key<Answer> getKey() {
         return com.googlecode.objectify.Key.create(Answer.class, id); 
     }
+    
+    public String getOutput () {
+		String output = "<p class=\"ap\">" + this.answer + "</p>";
+		if ( this.next != null ) {
+			output += getNext().getOutput();
+		} else {
+			output += "<input type=\"button\" class=\"add-next\" value=\"add follow up question\" key=\"" + this.id + "\" />";
+		}
+		return output;
+	}
 }
