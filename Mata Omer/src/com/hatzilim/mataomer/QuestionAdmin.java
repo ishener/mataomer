@@ -73,8 +73,15 @@ public class QuestionAdmin extends HttpServlet {
 			
 			// lastly save the question
 			ofy().save().entity(q).now();
-			resp.getWriter().println( "successfully persisten question id: " + q.getId() );
-			// TODO: check errors with objectify
+			
+			if (req.getParameter("key") == null) {
+				// we added a top level question
+				resp.getWriter().println( "successfully persisten question id: " + q.getId() );
+			} else {
+				// we need to update the next field in the 'key' 
+				
+			}
+			
 		} 
 		
 	}

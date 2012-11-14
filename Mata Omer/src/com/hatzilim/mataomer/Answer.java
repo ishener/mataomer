@@ -47,7 +47,7 @@ public class Answer {
 		if ( this.next != null ) {
 			output += getNext().getOutput();
 		} else {
-			output += "<input type=\"button\" class=\"add-next\" value=\"add follow up question\" key=\"" + this.id + "\" />";
+			output += "<input type=\"button\" class=\"add-next\" value=\"Add follow up question >>>\" key=\"" + this.id + "\" />";
 		}
 		return output;
 	}
