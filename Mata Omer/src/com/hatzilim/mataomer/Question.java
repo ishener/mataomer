@@ -63,7 +63,7 @@ public class Question {
 	}
 
 	public void setAnswers(List<Ref<Answer>> answers) {
-		this.answers = answers;
+		this.answers = answers;   
 	}
 	
 	public String getOutput () {
