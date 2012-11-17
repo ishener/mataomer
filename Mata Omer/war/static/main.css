@@ -8,3 +8,11 @@ input[type="text"] {
 .qNode {
 	width: 400px;
 }
+.answer-div {
+	position: relative;
+}
+.answer-div .qNode {
+	position: absolute;
+	top:0;
+	left: 400px;
+}

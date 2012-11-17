@@ -85,12 +85,12 @@ public class QuestionAdmin extends HttpServlet {
 				ofy().save().entity(topAnswer).now();
 				// TODO: get the top question to show in the tree
 			}
-			req.setAttribute("questions", q);
-			try { 
-				getServletContext().getRequestDispatcher("/admin/view-questions.jsp").forward(req, resp); 
-			} catch (ServletException e) {
-				System.out.println (e.getMessage());
-			}
+//			req.setAttribute("questions", q);
+//			try { 
+//				getServletContext().getRequestDispatcher("/admin/view-questions.jsp").forward(req, resp); 
+//			} catch (ServletException e) {
+//				System.out.println (e.getMessage());
+//			}
 			
 		} 
 		

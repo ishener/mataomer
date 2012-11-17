@@ -52,13 +52,14 @@ ${q.output}
 						 $(this).parent().offset().left + 400 ); // show the form where the question box ends
 		});
 		
+		/*
 		$('#add-question-form').submit(function() {
 			var toSend = $(this).serialize();
 			$.post('/admin/process', toSend, function(data) {
 				console.log(data);
 			});
 		});
-		
+		*/
 	});
 	
 	

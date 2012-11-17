@@ -45,7 +45,7 @@ public class Answer {
     
     public String getOutput () {
     	StringBuilder strBuilder= new StringBuilder();
-    	strBuilder.append("<p class=\"ap\">").append( this.answer ).append("</p>");
+    	strBuilder.append("<div class=\"answer-div\"><p class=\"ap\">").append( this.answer ).append("</p>");
 		if ( this.next != null ) {
 			strBuilder.append( getNext().getOutput() );
 		} else {
@@ -53,6 +53,7 @@ public class Answer {
 					  .append( this.id )
 					  .append( "\" />" );
 		}
+		strBuilder.append("</div>");
 		return strBuilder.toString();
 	}
 }
