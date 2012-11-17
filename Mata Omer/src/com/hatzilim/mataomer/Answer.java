@@ -4,12 +4,13 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
 @Entity
 public class Answer {
 	@Id Long id;
 	@Index String answer;
-	Ref<Question> next;
+	@Load Ref<Question> next;
 	
 	public Answer () { }
 	
@@ -43,12 +44,15 @@ public class Answer {
     }
     
     public String getOutput () {
-		String output = "<p class=\"ap\">" + this.answer + "</p>";
+    	StringBuilder strBuilder= new StringBuilder();
+    	strBuilder.append("<p class=\"ap\">").append( this.answer ).append("</p>");
 		if ( this.next != null ) {
-			output += getNext().getOutput();
+			strBuilder.append( getNext().getOutput() );
 		} else {
-			output += "<input type=\"button\" class=\"add-next\" value=\"Add follow up question >>>\" key=\"" + this.id + "\" />";
+			strBuilder.append( "<input type=\"button\" class=\"add-next\" value=\"Add follow up question >>>\" key=\"" )
+					  .append( this.id )
+					  .append( "\" />" );
 		}
-		return output;
+		return strBuilder.toString();
 	}
 }

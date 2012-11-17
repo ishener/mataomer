@@ -18,14 +18,14 @@ public class Mata_OmerServlet extends HttpServlet {
 		
 		resp.setContentType("text/plain");
 		
-		Answer a = new Answer ("answer 3");
-		ofy().save().entity(a).now();
+//		Answer a = new Answer ("answer 3");
+//		ofy().save().entity(a).now();
+//		
+//		Question q = new Question ("the text for the q");
+//		q.addAnswer(a);
+//		ofy().save().entity(q).now();
 		
-		Question q = new Question ("the text for the q");
-		q.addAnswer(a);
-		ofy().save().entity(q).now();
-		
-//		Question q = ofy().load().type(Question.class).id(1).get();
-		resp.getWriter().println( a.getKey() );
+		Answer a = ofy().load().type(Answer.class).id(24).get();
+		resp.getWriter().println( a.next.get() );
 	}
 }

@@ -52,7 +52,7 @@ public class QuestionAdmin extends HttpServlet {
 		ObjectifyService.register(Question.class);
 		ObjectifyService.register(Answer.class);
 		
-		resp.setContentType("text/plain");
+//		resp.setContentType("text/plain");
 		
 		if ( req.getParameter("question") != null ) {
 			
@@ -76,10 +76,20 @@ public class QuestionAdmin extends HttpServlet {
 			
 			if (req.getParameter("key") == null) {
 				// we added a top level question
-				resp.getWriter().println( "successfully persisten question id: " + q.getId() );
+//				resp.getWriter().println( "successfully persisten question id: " + q.getId() );
 			} else {
 				// we need to update the next field in the 'key' 
-				
+				Long key = Long.valueOf( req.getParameter("key") );
+				Answer topAnswer = ofy().load().type(Answer.class).id(key).get();
+				topAnswer.setNext(q);
+				ofy().save().entity(topAnswer).now();
+				// TODO: get the top question to show in the tree
+			}
+			req.setAttribute("questions", q);
+			try { 
+				getServletContext().getRequestDispatcher("/admin/view-questions.jsp").forward(req, resp); 
+			} catch (ServletException e) {
+				System.out.println (e.getMessage());
 			}
 			
 		} 
