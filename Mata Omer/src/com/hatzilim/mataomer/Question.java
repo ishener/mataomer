@@ -67,14 +67,19 @@ public class Question {
 	}
 	
 	public String getOutput () {
-		StringBuilder strBuilder = new StringBuilder("<div class=\"qNode\">");
-		strBuilder.append("<p class=\"qp\">").append(this.question).append("</p>");
+		StringBuilder strBuilder = new StringBuilder("<div class=\"qNode\" key=\"" + this.id + "\">");
+		strBuilder.append("<p class=\"qp\"><a key=\"" + this.id + "\">" + this.question + "</a> " + 
+						HTMLWidgetFactory.createButton( "edit-q", "Edit", this.id.toString() ) +
+						HTMLWidgetFactory.createButton( "remove-q", "Remove", this.id.toString() ) 
+						  + "</p>");
 		for ( Answer a : getAnswers() ) {
 			strBuilder.append( a.getOutput() );
 		}
 		strBuilder.append("</div>");
 		return strBuilder.toString();
 	}
+	
+	
 	
 }
 
