@@ -27,6 +27,8 @@ ${q.output}
 			</p>
 			
 			<input type="hidden" name="key" id="key" value="" />
+			<input type="hidden" name="answerkey" id="answerkey" value="" />
+			<input type="hidden" name="topkey" id="key" value="${q.id}" />
 			<input type="submit" />
 			<input type="reset" value="Reset">
 		</form>

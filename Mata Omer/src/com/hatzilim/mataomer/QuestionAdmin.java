@@ -22,22 +22,18 @@ public class QuestionAdmin extends HttpServlet {
 		
 		if ( req.getParameter("action") != null ) {
 			Long key = Long.parseLong(req.getParameter("key"));
+			
 			if ( req.getParameter("action").equalsIgnoreCase("delete") ) {
 				// delete according to the key parameter
 				ofy().delete().type(Question.class).id(key).now();
+				
 			} else if ( req.getParameter("action").equalsIgnoreCase("edit") ) {
 				// display the question tree
-				Question q = ofy().load().type(Question.class).id(key).get();
-				req.setAttribute("q", q);
-				try { 
-					getServletContext().getRequestDispatcher("/admin/show-tree.jsp").forward(req, resp); 
-				} catch (ServletException e) {
-					System.out.println (e.getMessage());
-				}
+				displayTree(key, req, resp);
 				return;
 			}
 		}
-		
+		// just shows all the top level questions
 		List<Question> questions = ofy().load().type(Question.class).limit(50).list();
 		req.setAttribute("questions", questions);
 		try { 
@@ -52,48 +48,87 @@ public class QuestionAdmin extends HttpServlet {
 		ObjectifyService.register(Question.class);
 		ObjectifyService.register(Answer.class);
 		
-//		resp.setContentType("text/plain");
 		
 		if ( req.getParameter("question") != null ) {
 			
-			// first we create the question to add the answers
-			Question q = new Question ( req.getParameter("question") );
-			q.setOpenQuestion( req.getParameter("open_answer") != null );
-			
-			// now loop through the answers, persist each one, and add to q
-			String[] answers = req.getParameterValues("option");
-			Answer a;
-			for( String answer : answers) {
-				if (answer != null  && answer.trim().length() > 0) {
-					a = new Answer (answer);
+			if ( req.getParameter("key") != null && req.getParameter("key").length() > 0 ) {
+				// updating an existing question
+				Long key = Long.valueOf( req.getParameter("key") );
+				Question q = ofy().load().type(Question.class).id(key).get();
+				q.setQuestion(req.getParameter("question"));
+				
+				// loop through answers and update them
+				String[] answers = req.getParameterValues("option");
+				int i = 0;
+				for ( Answer a : q.getAnswers() ) {
+					a.setAnswer(answers[i++]);
 					ofy().save().entity(a).now();
-					q.addAnswer(a);
+				}
+				
+				// if we have more answers. add them
+				Answer a;
+				for (; i < answers.length; i++) {
+					if (answers[i].trim().length() > 0) {
+						a = new Answer (answers[i]);
+						ofy().save().entity(a).now();
+						q.addAnswer(a);
+					}
+				}
+				ofy().save().entity(q).now();
+
+				// get the top question to show in the tree
+				displayTree(Long.valueOf(req.getParameter("topkey")), req, resp);
+			} else {
+				// inserting a new question, either top level or next answer
+				
+				// first we create the question to add the answers
+				Question q = new Question ( req.getParameter("question") );
+				q.setOpenQuestion( req.getParameter("open_answer") != null );
+				
+				// now loop through the answers, persist each one, and add to q
+				String[] answers = req.getParameterValues("option");
+				Answer a;
+				for( String answer : answers) {
+					if (answer != null  && answer.trim().length() > 0) {
+						a = new Answer (answer);
+						ofy().save().entity(a).now();
+						q.addAnswer(a);
+					}
+				}
+				// lastly save the question
+				ofy().save().entity(q).now();
+				
+				if (req.getParameter("answerkey") == null) { // new question
+					// we added a top level question
+					displayTree(q.getId(), req, resp);
+				} else {
+					
+					// we need to update the next field in the 'key' 
+					Long key = Long.valueOf( req.getParameter("answerkey") );
+					Answer topAnswer = ofy().load().type(Answer.class).id(key).get();
+					topAnswer.setNext(q);
+					ofy().save().entity(topAnswer).now();		
+					
+					// get the top question to show in the tree
+					displayTree(Long.valueOf(req.getParameter("topkey")), req, resp);
 				}
 			}
 			
-			// lastly save the question
-			ofy().save().entity(q).now();
-			
-			if (req.getParameter("key") == null) {
-				// we added a top level question
-//				resp.getWriter().println( "successfully persisten question id: " + q.getId() );
-			} else {
-				// we need to update the next field in the 'key' 
-				Long key = Long.valueOf( req.getParameter("key") );
-				Answer topAnswer = ofy().load().type(Answer.class).id(key).get();
-				topAnswer.setNext(q);
-				ofy().save().entity(topAnswer).now();
-				// TODO: get the top question to show in the tree
-			}
-//			req.setAttribute("questions", q);
-//			try { 
-//				getServletContext().getRequestDispatcher("/admin/view-questions.jsp").forward(req, resp); 
-//			} catch (ServletException e) {
-//				System.out.println (e.getMessage());
-//			}
 			
 		} 
 		
+	}
+	
+	
+	private void displayTree (Long key, HttpServletRequest req, HttpServletResponse resp) throws IOException  {
+		// display the question tree
+		Question q = ofy().load().type(Question.class).id(key).get();
+		req.setAttribute("q", q);
+		try { 
+			getServletContext().getRequestDispatcher("/admin/show-tree.jsp").forward(req, resp); 
+		} catch (ServletException e) {
+			System.out.println (e.getMessage());
+		}
 	}
 	
 }

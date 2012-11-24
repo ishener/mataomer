@@ -13,7 +13,7 @@ $(function() {
 //					 $(this).offset().top, // show the form in the same line as the button
 //					 $(this).parent().offset().left + 400 ); // show the form where the question box ends
 		$('#add-question-form')[0].reset();
-		$('#key').val( $(this).attr('key') );
+		$('#answerkey').val( $(this).attr('key') );
 		$(this).replaceWith( $('#theform').show() );
 		
 	});
@@ -38,8 +38,8 @@ $(function() {
 		showHideAnswers($(this).attr('key'), 'hide');
 		$form = $('#theform').show();
 		$(this).parent().after( $form );
-		$('#question').val( $(this).siblings('a').html() );
 		$('#add-question-form')[0].reset();
+		$('#question').val( $(this).siblings('a').html() );
 		var i = 0;
 		$('.qNode[key="' + $(this).attr('key') + '"] > .answer-div > p').each(function() {
 			// loop through the answers 
@@ -47,6 +47,7 @@ $(function() {
 			if (i++)
 				$('#answers-wrap').append('<input type="text" name="option" class="option-text" />');
 		});
+		$('#key').val( $(this).attr('key') );
 	});
 });
 

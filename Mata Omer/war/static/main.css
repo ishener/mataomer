@@ -1,3 +1,50 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	font-family: Arial, Helvetica;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1.2;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
 input[type="text"] {
 	display: block;
 }
@@ -17,9 +64,68 @@ input[type="text"] {
 	left: 400px;
 }
 */
+.qNode { 
+	width: 400px;
+	border: 2px solid grey;
+	padding: 0;
+}
+.qNode:after {
+	content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
 .answer-div .qNode {
 	margin-left: 400px;
+	float: left;
+	/*margin-top: -30px;*/
 }
 .qNode .qNode .ap, .qNode .qNode .add-next  {
 	display: none;
+}
+.answer-div {
+	/*padding: 10px 50px; */
+	clear: both;
+	background: #EDECEE;
+}
+.qp {
+	padding: 10px 20px;
+	position: relative;
+	background: #D9D9F5;
+}
+.answer-div:nth-child(2n) {
+	background: #E0E0E0;
+}
+.ap {
+	padding: 10px 50px;
+}
+.add-next , #theform {
+	margin-left: 50px;
+}
+.qp input {
+	display: none;
+	background: url(images/icons-2411.png) no-repeat -3px 0 #D9D9F5;
+	cursor: pointer;
+	border: none;
+	width: 25px;
+	height: 25px;
+	position: absolute;
+top: 3px;
+right: 5px;
+}
+.qp:hover > input {
+	display: inline;
+}
+.qp a {
+	cursor: pointer;
+}
+.qp input.edit-q {
+	background-position: -62px 0;
+right: 40px;
+}
+.line-img {
+	position: absolute;
+top: 10px;
+left: -340px;
 }
