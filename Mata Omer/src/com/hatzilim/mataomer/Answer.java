@@ -33,6 +33,7 @@ public class Answer {
 	}
 
 	public Question getNext() { 
+		if (next == null) return null;
 		return next.get(); 
 	}
     public void setNext(Question value) { 

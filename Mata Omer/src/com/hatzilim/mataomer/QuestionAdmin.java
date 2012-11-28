@@ -75,9 +75,16 @@ public class QuestionAdmin extends HttpServlet {
 					}
 				}
 				ofy().save().entity(q).now();
+				
+				if (req.getParameter("answerkey") != null && req.getParameter("answerkey").length() > 0) {
+					// means we are not just updating but adding an existing question
+					// to a new answer
+					q.setPrevious(Long.valueOf(req.getParameter("answerkey")));
+				}
 
 				// get the top question to show in the tree
-				displayTree(Long.valueOf(req.getParameter("topkey")), req, resp);
+//				displayTree(Long.valueOf(req.getParameter("topkey")), req, resp);
+				resp.sendRedirect("/admin/process?action=edit&key=" + req.getParameter("topkey"));
 			} else {
 				// inserting a new question, either top level or next answer
 				
@@ -100,17 +107,16 @@ public class QuestionAdmin extends HttpServlet {
 				
 				if (req.getParameter("answerkey") == null) { // new question
 					// we added a top level question
-					displayTree(q.getId(), req, resp);
+//					displayTree(q.getId(), req, resp);
+					resp.sendRedirect("/admin/process?action=edit&key=" + q.getId());
 				} else {
 					
 					// we need to update the next field in the 'key' 
-					Long key = Long.valueOf( req.getParameter("answerkey") );
-					Answer topAnswer = ofy().load().type(Answer.class).id(key).get();
-					topAnswer.setNext(q);
-					ofy().save().entity(topAnswer).now();		
+					q.setPrevious(Long.valueOf(req.getParameter("answerkey")));	
 					
 					// get the top question to show in the tree
-					displayTree(Long.valueOf(req.getParameter("topkey")), req, resp);
+					//displayTree(Long.valueOf(req.getParameter("topkey")), req, resp);
+					resp.sendRedirect("/admin/process?action=edit&key=" + req.getParameter("topkey"));
 				}
 			}
 			

@@ -47,9 +47,13 @@ table {
 
 input[type="text"] {
 	display: block;
+	width: 100%;
+	margin: 5px 0;
 }
 .tree-view #theform {
 	display: none;
+	padding: 10px 50px;
+	background: #DDFAD2;
 }
 /* the first idea was to use absolute positioning
 .qNode {
@@ -100,7 +104,7 @@ input[type="text"] {
 .ap {
 	padding: 10px 50px;
 }
-.add-next , #theform {
+.add-next  {
 	margin-left: 50px;
 }
 .qp input {
@@ -128,4 +132,7 @@ right: 40px;
 	position: absolute;
 top: 10px;
 left: -340px;
+}
+#theform p {
+	padding: 5px 0;
 }

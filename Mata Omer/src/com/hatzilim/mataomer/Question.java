@@ -1,8 +1,12 @@
 package com.hatzilim.mataomer;
 
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -66,6 +70,13 @@ public class Question {
 		this.answers = answers;   
 	}
 	
+	public void setPrevious (Long answerKey) {
+		// we need to update the next field in the 'key' 
+		Answer topAnswer = ofy().load().type(Answer.class).id(answerKey).get();
+		topAnswer.setNext(this);
+		ofy().save().entity(topAnswer).now();
+	}
+	
 	public String getOutput () {
 		StringBuilder strBuilder = new StringBuilder("<div class=\"qNode\" key=\"" + this.id + "\">");
 		strBuilder.append("<p class=\"qp\"><a key=\"" + this.id + "\">" + this.question + "</a> " +
@@ -78,6 +89,16 @@ public class Question {
 		}
 		strBuilder.append("</div>");
 		return strBuilder.toString();
+	}
+	
+	public Map<Long, String> getAllQuestions () {
+		Map<Long, String> all = new HashMap<Long, String>();
+		all.put(this.id, this.question);
+		for ( Answer a : getAnswers() ) {
+			if (a.getNext() != null)
+				all.putAll( a.getNext().getAllQuestions() );
+		}
+		return all;
 	}
 	
 	

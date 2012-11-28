@@ -25,7 +25,7 @@ public class Mata_OmerServlet extends HttpServlet {
 //		q.addAnswer(a);
 //		ofy().save().entity(q).now();
 		
-		Answer a = ofy().load().type(Answer.class).id(24).get();
-		resp.getWriter().println( a.next.get() );
+		Question a = ofy().load().type(Question.class).id(81).get();
+		resp.getWriter().println( a.getAllQuestions() );
 	}
 }

@@ -9,23 +9,13 @@ $(function() {
 	
 	// add the next question button
 	$('.add-next').click(function() {
-//		showAddForm( $(this).attr('key'),  // to fill the hidden input
-//					 $(this).offset().top, // show the form in the same line as the button
-//					 $(this).parent().offset().left + 400 ); // show the form where the question box ends
 		$('#add-question-form')[0].reset();
+		resetForm();
+		$('#key, #answerkey').val('');
 		$('#answerkey').val( $(this).attr('key') );
 		$(this).replaceWith( $('#theform').show() );
 		
 	});
-	
-	/*
-	$('#add-question-form').submit(function() {
-		var toSend = $(this).serialize();
-		$.post('/admin/process', toSend, function(data) {
-			console.log(data);
-		});
-	});
-	*/
 	
 	
 	$('.qp a').click(function() {
@@ -36,8 +26,14 @@ $(function() {
 	$('.edit-q').click(function() {
 		// populate the form in order to edit the question
 		showHideAnswers($(this).attr('key'), 'hide');
-		$form = $('#theform').show();
-		$(this).parent().after( $form );
+		var $form = $('#theform');
+		if ($form.is(":visible")) {
+			$form.hide();
+			return;
+		}
+		resetForm();
+		$('#key, #answerkey').val('');
+		$(this).parent().after( $form.show() );
 		$('#add-question-form')[0].reset();
 		$('#question').val( $(this).siblings('a').html() );
 		var i = 0;
@@ -49,17 +45,44 @@ $(function() {
 		});
 		$('#key').val( $(this).attr('key') );
 	});
+	
+	
+	$( "#question" ).autocomplete({
+        source: availableTags,
+        focus: function(event, ui) {
+            $("#question").val(ui.item.label);
+            return false;
+        },
+        select: function(event, ui) {
+            $("#question").val(ui.item.label);
+            prepareForm((ui.item.value));
+            return false;
+        }
+    });
 });
 
-
+function prepareForm (key) {
+	// fill the form with the values for question key
+	resetForm();
+	var i = 0;
+	$('.qNode[key="' + key + '"] > .answer-div > p').each(function() {
+		// loop through the answers 
+		$('.option-text:eq(' + i + ')').val ( $(this).html() );
+		if (i++)
+			$('#answers-wrap').append('<input type="text" name="option" class="option-text" />');
+	});
+	$('#key').val(key);
+}
 function showHideAnswers (key, action) {
 	var $answers = $('.qNode[key="'+key+'"] > .answer-div > p, .qNode[key="'+key+'"] > .answer-div > input');
 	if (action == 'toggle') {
 		$answers.slideToggle();
 	} else if (action == 'hide') {
-		console.log('got here');
 		$answers.hide();
 	} else {
 		$answers.show();
 	}
+}
+function resetForm() {
+	$('.option-text').not('.first').not(':first').remove();
 }
