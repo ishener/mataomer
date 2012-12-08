@@ -20,7 +20,8 @@ $(function() {
 	
 	$('.qp a').click(function() {
 		var key = $(this).attr('key');
-		showHideAnswers (key, 'toggle');
+		$(this).parent().parent().children('.answer-div').children('p').toggle();
+		$(this).parent().parent().children('.answer-div').children('input').toggle();
 	});
 	
 	$('.edit-q').click(function() {
@@ -37,7 +38,7 @@ $(function() {
 		$('#add-question-form')[0].reset();
 		$('#question').val( $(this).siblings('a').html() );
 		var i = 0;
-		$('.qNode[key="' + $(this).attr('key') + '"] > .answer-div > p').each(function() {
+		$('.qNode[key="' + $(this).attr('key') + '"]:first > .answer-div > p').each(function() {
 			// loop through the answers 
 			$('.option-text:eq(' + i + ')').val ( $(this).html() );
 			if (i++)
@@ -59,13 +60,21 @@ $(function() {
             return false;
         }
     });
+	
+	$('.remove-q').click(function() {
+		var toSend = {
+				key: $(this).attr('key'),
+				action: "remove"
+		};
+		$.post('/admin/process', toSend);
+	});
 });
 
 function prepareForm (key) {
 	// fill the form with the values for question key
 	resetForm();
 	var i = 0;
-	$('.qNode[key="' + key + '"] > .answer-div > p').each(function() {
+	$('.qNode[key="' + key + '"]:first > .answer-div > p').each(function() {
 		// loop through the answers 
 		$('.option-text:eq(' + i + ')').val ( $(this).html() );
 		if (i++)

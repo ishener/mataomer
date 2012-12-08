@@ -19,7 +19,7 @@ public class Question {
 	@Id Long id;
 	@Index String question;
 	@Index Boolean openQuestion;
-	@Load List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
+	@Index @Load List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
 	
 	public Question () {
 		
@@ -83,6 +83,8 @@ public class Question {
 						HTMLWidgetFactory.createImg( "line-img", "/static/images/line-2411.png" ) +
 						HTMLWidgetFactory.createButton( "edit-q", "", this.id.toString() ) +
 						HTMLWidgetFactory.createButton( "remove-q", "", this.id.toString() ) 
+//						HTMLWidgetFactory.createFormButton( "remove-q", "",  "/admin/process", 
+//								"key", this.id.toString(), "action", "remove" ) 
 						  + "</p>");
 		for ( Answer a : getAnswers() ) {
 			strBuilder.append( a.getOutput() );

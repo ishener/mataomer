@@ -48,8 +48,22 @@ public class QuestionAdmin extends HttpServlet {
 		ObjectifyService.register(Question.class);
 		ObjectifyService.register(Answer.class);
 		
-		
-		if ( req.getParameter("question") != null ) {
+		if (req.getParameter("action") != null && req.getParameter("action").equals("remove")) {
+			// removing a question inside a tree
+			Long key = Long.valueOf( req.getParameter("key") );
+			List<Answer> as = ofy().load().type(Answer.class).filter("next", com.googlecode.objectify.Key.create(Question.class, key) ).list();
+			// loop through all the answers that this question is their next, and nullify
+			for (Answer a : as) {
+				resp.getWriter().println( a.getAnswer() );
+				a.setNext(null);
+				ofy().save().entity(a).now();
+			}
+			
+			ofy().delete().type(Question.class).id(key).now();
+			
+			resp.sendRedirect("/admin/process?action=edit&key=81");// + req.getParameter("topkey"));
+			
+		} else if ( req.getParameter("question") != null ) {
 			
 			if ( req.getParameter("key") != null && req.getParameter("key").length() > 0 ) {
 				// updating an existing question

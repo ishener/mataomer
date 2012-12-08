@@ -1,13 +1,15 @@
 package com.hatzilim.mataomer;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.ObjectifyService;
-import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @SuppressWarnings("serial")
 public class Mata_OmerServlet extends HttpServlet {
@@ -25,7 +27,15 @@ public class Mata_OmerServlet extends HttpServlet {
 //		q.addAnswer(a);
 //		ofy().save().entity(q).now();
 		
-		Question a = ofy().load().type(Question.class).id(81).get();
-		resp.getWriter().println( a.getAllQuestions() );
+		List<Answer> as = ofy().load().type(Answer.class).filter("next", com.googlecode.objectify.Key.create(Question.class, 177) ).list();
+		
+		for (Answer a : as) {
+			resp.getWriter().println( a.getAnswer() );
+			a.setNext(null);
+			ofy().save().entity(a).now();
+		}
+		
+		
+		
 	}
 }

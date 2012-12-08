@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.Load;
 public class Answer {
 	@Id Long id;
 	@Index String answer;
-	@Load Ref<Question> next;
+	@Index @Load Ref<Question> next;
 	
 	public Answer () { }
 	
@@ -37,7 +37,10 @@ public class Answer {
 		return next.get(); 
 	}
     public void setNext(Question value) { 
-    	next = Ref.create(value.getKey(), value);
+    	if (value == null)
+    		next = null;
+    	else
+    		next = Ref.create(value.getKey(), value);
     }
     
     com.googlecode.objectify.Key<Answer> getKey() {
