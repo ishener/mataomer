@@ -3,13 +3,16 @@ package com.hatzilim.mataomer;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Date;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.ObjectifyService;
+
 
 @SuppressWarnings("serial")
 public class Mata_OmerServlet extends HttpServlet {
@@ -17,23 +20,31 @@ public class Mata_OmerServlet extends HttpServlet {
 			throws IOException {
 		ObjectifyService.register(Question.class);
 		ObjectifyService.register(Answer.class);
+		ObjectifyService.register(User.class);
 		
-		resp.setContentType("text/plain");
-		
-//		Answer a = new Answer ("answer 3");
-//		ofy().save().entity(a).now();
-//		
-//		Question q = new Question ("the text for the q");
-//		q.addAnswer(a);
-//		ofy().save().entity(q).now();
-		
-		List<Answer> as = ofy().load().type(Answer.class).filter("next", com.googlecode.objectify.Key.create(Question.class, 177) ).list();
-		
-		for (Answer a : as) {
-			resp.getWriter().println( a.getAnswer() );
-			a.setNext(null);
-			ofy().save().entity(a).now();
-		}
+		UserService userService = UserServiceFactory.getUserService();
+
+        String thisURL = req.getRequestURI();
+
+        resp.setContentType("text/html");
+        if (req.getUserPrincipal() != null) {
+        	String id = userService.getCurrentUser().getUserId();
+        	User user = ofy().load().type(User.class).id(id).get();
+        	if (user == null) {
+        		// we have a brand new user
+        		user = new User (userService.getCurrentUser().getEmail(), id);
+        	}
+        	user.setLastSeen(new Date());
+        	ofy().save().entity(user).now();
+        	
+            resp.getWriter().println("<p>You can <a href=\"" +
+                                     userService.createLogoutURL(thisURL) +
+                                     "\">sign out</a>.</p>");
+        } else {
+            resp.getWriter().println("<p>Please <a href=\"" +
+                                     userService.createLoginURL(thisURL) +
+                                     "\">sign in</a>.</p>");
+        }		
 		
 		
 		
