@@ -4,6 +4,7 @@ package com.hatzilim.mataomer;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -116,6 +117,14 @@ public class QuestionAdmin extends HttpServlet {
 						q.addAnswer(a);
 					}
 				}
+				// now tags. first check because it's optional
+				if ( req.getParameter("tags") != null ) {
+					List<String> tags = Arrays.asList( req.getParameter("tags").split(",") );
+					for (String tag : tags) {
+						q.addTag(tag);
+					}
+				}
+				
 				// lastly save the question
 				ofy().save().entity(q).now();
 				

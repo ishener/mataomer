@@ -20,6 +20,7 @@ public class Question {
 	@Index String question;
 	@Index Boolean openQuestion;
 	@Index @Load List<Ref<Answer>> answers = new ArrayList<Ref<Answer>>();
+	@Index List<String> tags = new ArrayList<String>();
 	
 	public Question () {
 		
@@ -53,6 +54,15 @@ public class Question {
 	com.googlecode.objectify.Key<Question> getKey() {
         return com.googlecode.objectify.Key.create(Question.class, id); 
     }
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+	public void addTag(String tag) {
+		tags.add(tag);
+	}
 	
 	public void addAnswer ( Answer ans ) {
 		answers.add ( Ref.create(ans.getKey(), ans) );

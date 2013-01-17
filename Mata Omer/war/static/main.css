@@ -136,3 +136,10 @@ left: -340px;
 #theform p {
 	padding: 5px 0;
 }
+#wrapper.centered {
+	max-width: 900px;
+	margin:0 auto;
+}
+#wrapper.centered textarea, #wrapper.centered input[type="text"] {
+width: 90%;
+}
